@@ -17,6 +17,9 @@ services:
       - backend-network
     depends_on:
       - redis-service
+    # This command takes precedence over Dockerfile’s default CMD 
+    # To show difference it runs server on port 8000 instead of 5000
+    command: "gunicorn page-tracker.app:app --bind 0.0.0.0:8000"
 
 networks:
     backend-network:
