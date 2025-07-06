@@ -10,7 +10,7 @@ services:
   web-service:
     build: ./web
     ports:
-      - "80:5000"
+      - "80:8000"
     environment:
       REDIS_URL: "redis://redis-service:6379"
     networks:
@@ -19,7 +19,7 @@ services:
       - redis-service
     # This command takes precedence over Dockerfile’s default CMD 
     # To show difference it runs server on port 8000 instead of 5000
-    command: "gunicorn page-tracker.app:app --bind 0.0.0.0:8000"
+    command: "gunicorn page_tracker.app:app --bind 0.0.0.0:8000"
 
 networks:
     backend-network:

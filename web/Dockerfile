@@ -1,7 +1,7 @@
 # multi-stage builds by partition Dockerfile into stages
 # each stage can be based on a completely different image
 
-# stage-0 creating a temporary builder stage 
+# STAGE-0 CREATES a TEMPORARY builder stage 
 # so there will be no trace of it in the resulted Docker images
 FROM python:3-slim-bullseye AS builder
 
@@ -9,12 +9,12 @@ FROM python:3-slim-bullseye AS builder
 RUN apt-get update && \
     apt-get upgrade --yes 
 
-# creating a dedicated user
+# CREATES a dedicated user
 RUN useradd --create-home realpython
 USER realpython
 WORKDIR /home/realpython
 
-# creates a virtual environment to avoid 
+# CREATES a virtual environment to avoid 
 # a risk interfering with the Linux own system tools.
 ENV VIRTUALENV=/home/realpython/venv 
 RUN python3 -m venv $VIRTUALENV
@@ -28,7 +28,7 @@ ENV PATH="$VIRTUALENV/bin:$PATH"
 # Only copy METADATA files, contains info about the project’s dependencies
 #   from a HOST machine into the Docker IMAGE.
 # By default, files are owned by the superuser, 
-#   so the ownership changed to regular one created before
+#   so the OWNERSHIP CHANGED to regular one created before
 COPY --chown=realpython pyproject.toml constraints.txt ./
 
 # In rare cases, an old version of pip can actually prevent
@@ -37,13 +37,13 @@ COPY --chown=realpython pyproject.toml constraints.txt ./
 RUN python -m pip install --upgrade pip setuptools && \
     python -m pip install --no-cache-dir -c constraints.txt ".[dev]"
 
-# Copying & installing the app package makes NEW Docker layers. 
+# COPYING & INSTALLING the app package makes NEW Docker layers. 
 # Therefore, any changes in source code WON'T require reinstalling 
 # dependencies saved in the previous cached layer.
 COPY --chown=realpython src/ src/
 COPY --chown=realpython test/ test/
 
-# Baking the automated testing tools into the build process 
+# BAKING the automated TESTING tools into the build process 
 # ensures that if ANY ONE of them returns a non-zero exit_status_code, 
 # then building your Docker image will fail.
 # 
@@ -58,7 +58,7 @@ RUN python -m pip install . -c constraints.txt && \
     python -m bandit -r src/ --quiet && \
 	python -m pip wheel --wheel-dir dist/ . -c constraints.txt
 
-# stage-1 is building a distribution package
+# STAGE-1 is building a distribution package
 FROM python:3-slim-bullseye
 
 RUN apt-get update && \
@@ -75,11 +75,11 @@ ENV PATH="$VIRTUALENV/bin:$PATH"
 # copying .whl from the builder stage
 COPY --from=builder /home/realpython/dist/page_tracker*.whl /home/realpython
 
-# install .whl with pip
+# INSTALL .whl with pip
 RUN python -m pip install --upgrade pip setuptools && \
     python -m pip install --no-cache-dir page_tracker*.whl
 
-# start webapp with Flask 
+# START WEBAPP with Flask 
 # binding the host to the 0.0.0.0 address in order to
 # make webapp accessible from outside the Docker container
 CMD ["flask", "--app", "page_tracker.app", "run", \
