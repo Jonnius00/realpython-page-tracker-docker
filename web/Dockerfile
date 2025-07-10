@@ -33,7 +33,8 @@ COPY --chown=realpython pyproject.toml constraints.txt ./
 
 # In rare cases, an old version of pip can actually prevent
 # the latest versions of other packages from installing, 
-# combined with upgrading setuptools to get the newest security patches
+# to avoid this PIP is being UPDATED here along with 
+# the upgrading setuptools to get the newest security patches
 RUN python -m pip install --upgrade pip setuptools && \
     python -m pip install --no-cache-dir -c constraints.txt ".[dev]"
 
