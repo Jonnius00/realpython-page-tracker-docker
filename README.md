@@ -144,11 +144,11 @@ bandit -r src/
 ## API Endpoints
 
 - `GET /`: Display the current page view count
-- `GET /healthcheck`: Service health status
 
 ## Environment Variables
 
-- `REDIS_URL`: URL to the Redis instance (default: `redis://localhost:6379`)
+- `REDIS_URL`: URL to the Redis instance (default: `redis://redis-service:6379`). Used by both the web and test services.
+- `FLASK_URL`: URL to the Flask web service (default: `http://web-service:8000`). Used by the test service for end-to-end testing.
 
 ## Built With
 
