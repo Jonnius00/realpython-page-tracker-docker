@@ -15,7 +15,11 @@ def flask_url(request):
 
 @pytest.fixture(scope="session")
 def redis_url(request):
-    return request.config.getoption("--redis-url")
+    url = request.config.getoption("--redis-url")
+    if not url:
+        import os
+        url = os.environ.get("REDIS_URL", "redis://redis-service:6379")
+    return url
 
 @pytest.fixture
 def http_client(): return app.test_client()
