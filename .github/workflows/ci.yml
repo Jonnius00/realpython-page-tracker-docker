@@ -21,7 +21,11 @@ jobs:
           --build 
           --exit-code-from test-service
       - name: login to Docker hub
-      uses: docker/login-actions@v2
+        uses: docker/login-actions@v2
+        if: ${{ github.event == "push" }}
+        with: 
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     
       
