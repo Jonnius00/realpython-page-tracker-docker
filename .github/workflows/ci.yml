@@ -15,3 +15,13 @@ jobs:
     steps:
       - name: checkout code from Github
         uses: actions/checkout@v3
+      - name: run E2E tests
+        run: >
+          docker compose --profile testing up
+          --build 
+          --exit-code-from test-service
+      - name: login to Docker hub
+      uses: docker/login-actions@v2
+
+    
+      
