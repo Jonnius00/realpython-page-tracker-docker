@@ -1,0 +1,17 @@
+name: Continuous Integration
+
+on:
+  pull_request: 
+    branches: 
+      - master
+  push: 
+    branches: 
+      - master
+
+jobs:
+  build:
+    name: build DOcker image and run E2E tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code from Github
+        uses: actions/checkout@v3
