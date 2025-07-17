@@ -15,7 +15,7 @@ def index():
     except RedisError:
         app.logger.exception("Redis error")  # pylint: disable=E1101
         # tells pylint to ignore the error E1101 not suppressing it completely
-        return "Sorry, something went wrong \N{thinking face}", 500
+        return "Sorry, something went wrong \N{THINKING FACE}", 500
     else:
         return f"This page has been seen {page_views} times."
 
