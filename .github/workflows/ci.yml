@@ -28,7 +28,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: push inmage to Docker hub
         uses: docker/build-push-action@v4.0.0
-        if: if: ${{ github.event == 'push' }}
+        if: ${{ github.event == 'push' }}
         with: 
           context: ./web
           push: true
