@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: build DOcker image and run E2E tests
+    name: build Docker image and run E2E tests
     runs-on: ubuntu-latest
     steps:
       - name: checkout code from Github
