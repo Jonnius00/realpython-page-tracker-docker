@@ -7,7 +7,7 @@ A web application that tracks page views with Flask and Redis, demonstrating Doc
 
 ## Overview
 
-Page Tracker is a Flask web application that counts and displays the number of page views, storing the counter in a Redis database. This project implements the architecture and practices described in the Real Python tutorial [Docker in Continuous Integration](https://realpython.com/docker-continuous-integration/).
+Page Tracker is a Flask web application that counts and displays the number of page views, storing the counter in a Redis database. This project implements the architecture and practices described in the Real Python tutorial [Build Robust Continuous Integration With Docker and Friends](https://realpython.com/docker-continuous-integration/).
 
 Key features:
 
@@ -15,6 +15,8 @@ Key features:
 - Containerized with Docker and orchestrated with Docker Compose
 - Comprehensive testing suite (unit, integration, end-to-end)
 - Development environment with code quality tools
+
+Docker in this project simulates a hypothetical production environment on a local machine and on a continuous integration (CI) server. 
 
 ## Project Structure
 
@@ -106,11 +108,12 @@ pytest test/integration/
 Test the complete system through HTTP requests:
 
 ```sh
-# Start the application
-docker compose up -d
+# Start the application with test profile
+docker compose --profile testing up -d
 
-# Run E2E tests
-pytest test/e2e/ --flask-url http://localhost:80 --redis-url redis://localhost:6379
+# Run E2E tests (executed automatically by test-service)
+# Manual execution if needed:
+pytest test/e2e/ --flask-url http://web-service:8000 --redis-url redis://redis-service:6379
 ```
 
 ### Running All Tests
@@ -150,12 +153,27 @@ bandit -r src/
 - `REDIS_URL`: URL to the Redis instance (default: `redis://redis-service:6379`). Used by both the web and test services.
 - `FLASK_URL`: URL to the Flask web service (default: `http://web-service:8000`). Used by the test service for end-to-end testing.
 
+## Continuous Integration
+
+The project uses GitHub Actions for CI/CD pipeline, defined in `.github/workflows/ci.yml`. The workflow:
+
+1. Triggers on:
+   - Pull requests to main branch
+   - Push events to main branch
+2. Steps:
+   - Builds Docker image
+   - Runs E2E tests using docker compose with testing profile
+   - On push to main:
+     - Logs in to Docker Hub
+     - Pushes image with tags: latest and commit SHA
+
 ## Built With
 
 - [Flask](https://flask.palletsprojects.com/) - Web framework
 - [Redis](https://redis.io/) - Database
 - [pytest](https://pytest.org/) - Testing framework
 - [Docker](https://www.docker.com/) - Containerization
+- [GitHub Actions](https://github.com/features/actions) - CI/CD Pipeline
 
 ## License
 
